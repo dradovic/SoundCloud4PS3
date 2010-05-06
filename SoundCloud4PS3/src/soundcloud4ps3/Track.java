@@ -1,4 +1,4 @@
-package soundcloud4pms;
+package soundcloud4ps3;
 
 public class Track {
 	private String title;

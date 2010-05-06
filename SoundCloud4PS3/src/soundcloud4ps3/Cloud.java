@@ -1,4 +1,4 @@
-package soundcloud4pms;
+package soundcloud4ps3;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import net.pms.external.SoundCloud4PMS;
+import net.pms.external.SoundCloud4PS3;
 import oauth.signpost.exception.OAuthExpectationFailedException;
 import oauth.signpost.exception.OAuthMessageSignerException;
 
@@ -68,7 +68,7 @@ public class Cloud {
 					tracks.add(new Track(title, artworkUrl, streamUrl));
 				}
 				else {
-					SoundCloud4PMS.log("Warning: stream-url of track '%s' is empty", title);
+					SoundCloud4PS3.log("Warning: stream-url of track '%s' is empty", title);
 				}
 			}
 		} catch (XPathExpressionException e) {

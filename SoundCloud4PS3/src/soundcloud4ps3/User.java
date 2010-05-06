@@ -1,4 +1,4 @@
-package soundcloud4pms;
+package soundcloud4ps3;
 
 public class User {
 	private String userName;

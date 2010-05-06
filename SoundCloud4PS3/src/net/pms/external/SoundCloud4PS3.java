@@ -12,10 +12,10 @@ import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import soundcloud4pms.Authorization;
-import soundcloud4pms.Cloud;
-import soundcloud4pms.Track;
-import soundcloud4pms.User;
+import soundcloud4ps3.Authorization;
+import soundcloud4ps3.Cloud;
+import soundcloud4ps3.Track;
+import soundcloud4ps3.User;
 
 import net.pms.Messages;
 import net.pms.PMS;
@@ -28,9 +28,9 @@ import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-public class SoundCloud4PMS implements AdditionalFolderAtRoot {
+public class SoundCloud4PS3 implements AdditionalFolderAtRoot {
 	
-	private static final String VERSION = "0.1";
+	private static final String VERSION = "0.2";
 
 	private Authorization authorization = new Authorization();
 	private Cloud cloud;
@@ -42,7 +42,7 @@ public class SoundCloud4PMS implements AdditionalFolderAtRoot {
 	private JTextField verificationCodeField = new JTextField();
 	private JLabel userLabel = new JLabel();
 
-	public SoundCloud4PMS() {
+	public SoundCloud4PS3() {
 		log("v%s", VERSION);
 		onAuthorizationStateChanged();
 	}
@@ -164,7 +164,7 @@ public class SoundCloud4PMS implements AdditionalFolderAtRoot {
 	
 	public static void log(String message, Object... args)
 	{
-		PMS.minimal("SoundCloud4PMS: " + String.format(message, args));
+		PMS.minimal("SoundCloud4PS3: " + String.format(message, args));
 	}
 
 	private void onAuthorizationStateChanged() {
