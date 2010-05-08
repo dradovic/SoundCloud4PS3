@@ -12,16 +12,15 @@ import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import soundcloud4ps3.Authorization;
-import soundcloud4ps3.Cloud;
-import soundcloud4ps3.Track;
-import soundcloud4ps3.User;
-
 import net.pms.Messages;
 import net.pms.PMS;
 import net.pms.dlna.DLNAResource;
 import net.pms.dlna.WebAudioStream;
-import net.pms.dlna.virtual.VirtualFolder;
+import soundcloud4ps3.Authorization;
+import soundcloud4ps3.Cloud;
+import soundcloud4ps3.Folder;
+import soundcloud4ps3.Track;
+import soundcloud4ps3.User;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.factories.Borders;
@@ -29,18 +28,21 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 public class SoundCloud4PS3 implements AdditionalFolderAtRoot {
-	
+
+	private static final String PLUGIN_NAME = "SoundCloud4PS3";
 	private static final String VERSION = "0.2";
 
-	private Authorization authorization = new Authorization();
+	private final Authorization authorization = new Authorization();
 	private Cloud cloud;
 
-	private ArrayList<Component> authorizationComponents = new ArrayList<Component>();
-	private ArrayList<Component> unauthorizationComponents = new ArrayList<Component>();	
-	private JLabel authorizationStateLabel = new JLabel();
-	private JTextArea authorizationUrlArea = new JTextArea();
-	private JTextField verificationCodeField = new JTextField();
-	private JLabel userLabel = new JLabel();
+	private final ArrayList<Component> authorizationComponents = new ArrayList<Component>();
+	private final ArrayList<Component> unauthorizationComponents = new ArrayList<Component>();
+	private final JLabel authorizationStateLabel = new JLabel();
+	private final JTextArea authorizationUrlArea = new JTextArea();
+	private final JTextField verificationCodeField = new JTextField();
+	private final JLabel userLabel = new JLabel();
+
+	private final Folder topFolder = new Folder();
 
 	public SoundCloud4PS3() {
 		log("v%s", VERSION);
@@ -50,7 +52,8 @@ public class SoundCloud4PS3 implements AdditionalFolderAtRoot {
 	@Override
 	public JComponent config() {
 
-		FormLayout layout = new FormLayout("70dlu, 10dlu, 300dlu", //$NON-NLS-1$
+		FormLayout layout = new FormLayout(
+				"70dlu, 10dlu, 300dlu", //$NON-NLS-1$
 				"p, 5dlu, p, 5dlu, p, 10dlu, 10dlu, p, 5dlu, p, 5dlu, p, 5dlu, p, 5dlu, p, 5dlu, p, 0:grow"); //$NON-NLS-1$
 		PanelBuilder builder = new PanelBuilder(layout);
 		builder.setBorder(Borders.EMPTY_BORDER);
@@ -66,7 +69,7 @@ public class SoundCloud4PS3 implements AdditionalFolderAtRoot {
 		cmp = (JComponent) cmp.getComponent(0);
 		cmp.setFont(cmp.getFont().deriveFont(Font.BOLD));
 		row += 2;
-		
+
 		// Authorization State
 		builder.addLabel("Current State:", cc.xy(1, row));
 		builder.add(authorizationStateLabel, cc.xy(3, row));
@@ -85,7 +88,7 @@ public class SoundCloud4PS3 implements AdditionalFolderAtRoot {
 
 		// Verification Code
 		authorizationComponents.add(builder.addLabel("Verification Code:", cc.xy(1, row)));
-		authorizationComponents.add(builder.add(verificationCodeField, cc.xy(3, row)));
+		authorizationComponents.add(builder.add(verificationCodeField, cc.xy(3,	row)));
 		row += 2;
 
 		// Authorize Button
@@ -144,27 +147,27 @@ public class SoundCloud4PS3 implements AdditionalFolderAtRoot {
 
 	@Override
 	public DLNAResource getChild() {
-		VirtualFolder vfs;
+		return topFolder;
+	}
+
+	private void updateChild() {
 		if (cloud != null) {
 			User user = cloud.getUser();
-			vfs = new VirtualFolder(Messages.getString(user.getUserName()
-					+ "'s SoundCloud"), user.getAvatarUrl());
+			topFolder.setName(Messages.getString(user.getUserName()	+ "'s SoundCloud"));
 			for (Track track : cloud.getFavoriteTracks()) {
-				vfs.addChild(new WebAudioStream(track.getTitle(), track
-						.getStreamUrl(), track.getArtworkUrl()));
+				topFolder.addChild(new WebAudioStream(
+						track.getTitle(), 
+						track.getStreamUrl(), 
+						track.getArtworkUrl()));
 			}
 		} else {
-			vfs = new VirtualFolder(
-					Messages
-							.getString("Please configure and authorize SoundCloud on your Media Server"),
-					null);
+			topFolder.setName(String.format("Please configure %s on your Media Server", PLUGIN_NAME));
+			// FIXME: clear children. but how?
 		}
-		return vfs;
 	}
-	
-	public static void log(String message, Object... args)
-	{
-		PMS.minimal("SoundCloud4PS3: " + String.format(message, args));
+
+	public static void log(String message, Object... args) {
+		PMS.minimal(PLUGIN_NAME + ": " + String.format(message, args));
 	}
 
 	private void onAuthorizationStateChanged() {
@@ -180,6 +183,7 @@ public class SoundCloud4PS3 implements AdditionalFolderAtRoot {
 		if (!isAuthorized) {
 			authorizationUrlArea.setText(authorization.getAuthorizationUrl());
 		}
-	    userLabel.setText(cloud != null ? cloud.getUser().getUserName() : "-");
+		userLabel.setText(cloud != null ? cloud.getUser().getUserName() : "-");
+		updateChild();
 	}
 }
