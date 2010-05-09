@@ -1,5 +1,8 @@
 package soundcloud4ps3;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 import net.pms.dlna.WebAudioStream;
 import net.pms.dlna.virtual.VirtualFolder;
 
@@ -25,24 +28,19 @@ public class CloudFolder extends VirtualFolder {
 		this.cloud = cloud;
 	}
 
-//	public void setName(String name) {
-//		this.name = name;
-//	}
-	
 	@Override
 	public void discoverChildren() {
 		super.discoverChildren();
 		if (cloud != null) {
-			for (Entity entity : cloud.retrieveEntities(resource)) {
-				if (entity instanceof User) {
-					User user = (User)entity;
-					addChild(new UserFolder(user, cloud));
-				}
-				else if (entity instanceof Track)
-				{
-					Track track = (Track)entity;
-					addChild(new WebAudioStream(track.getTitle(), track.getStreamUrl(), track.getArtworkUrl()));
-				}
+			ArrayList<User> users = new ArrayList<User>();
+			ArrayList<Track> tracks = new ArrayList<Track>();
+			cloud.retrieveEntities(resource, users, tracks);
+			Collections.sort(users);
+			for (User user : users) {
+				addChild(new UserFolder(user, cloud));
+			}
+			for (Track track : tracks) {
+				addChild(new WebAudioStream(track.getTitle(), track.getStreamUrl(), track.getArtworkUrl()));
 			}
 		}
 	}

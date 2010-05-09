@@ -1,6 +1,6 @@
 package soundcloud4ps3;
 
-public class User extends Entity {
+public class User implements Comparable<User> {
 	private final int id;
 	private final String userName;
 	private final String avatarUrl;
@@ -34,5 +34,10 @@ public class User extends Entity {
 
 	public String getFollowersResource() {
 		return String.format("users/%d/followers", id);
+	}
+
+	@Override
+	public int compareTo(User o) {
+		return getUserName().compareTo(o.getUserName());
 	}
 }
