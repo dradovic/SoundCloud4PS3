@@ -1,0 +1,17 @@
+1. Make sure sources contain no:
+   - errors
+   - warnings
+   - TODOs
+2. Make sure remote master is up-to-date
+3. Export jar, using the "export all output folder for selected projects" option 
+4. Tag the snapshot: 
+   git tag -a v0.3 -m "release v0.3"
+   git push origin v0.3
+5. Prepare zip
+   .\SoundCloud4PS3\make-zip.ps1 -v 0.3
+6. Upload zip to GitHub
+
+7. Test uploaded zip by downloading and installing it
+
+8. Announce new version
+9. Increment SoundCloud4PS3.VERSION and commit ("starting v0.4")
