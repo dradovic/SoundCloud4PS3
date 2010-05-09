@@ -1,7 +1,5 @@
 package soundcloud4ps3;
 
-import net.pms.PMS;
-
 import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
 import oauth.signpost.exception.OAuthMessageSignerException;
@@ -11,17 +9,12 @@ import org.urbanstew.soundcloudapi.SoundCloudAPI;
 import org.urbanstew.soundcloudapi.SoundCloudAPI.State;
 
 public class Authorization {
-	private static final String SOUNDCLOUD4PS3_TOKEN = "soundcloud4ps3.token";
-	private static final String SOUNDCLOUD4PS3_TOKEN_SECRET = "soundcloud4ps3.tokensecret";
-
 	private SoundCloudAPI api;
 	private String authorizationUrl;
 
 	public Authorization() {
-		String token = (String) PMS.getConfiguration().getCustomProperty(
-				SOUNDCLOUD4PS3_TOKEN);
-		String tokenSecret = (String) PMS.getConfiguration().getCustomProperty(
-				SOUNDCLOUD4PS3_TOKEN_SECRET);
+		String token = Settings.getToken();
+		String tokenSecret = Settings.getTokenSecret();
 		if (token != null && tokenSecret != null) {
 			api = new SoundCloudAPI("xECuntC8S1VOTtfxlGDdWA",
 					"xey7LrTE6YJW9JZX8LR5AHZuQMDJ5SV010fYBYWH8s", token,
@@ -82,10 +75,8 @@ public class Authorization {
 		} catch (OAuthCommunicationException e) {
 			e.printStackTrace();
 		}
-		PMS.getConfiguration().setCustomProperty(SOUNDCLOUD4PS3_TOKEN,
-				api.getToken());
-		PMS.getConfiguration().setCustomProperty(SOUNDCLOUD4PS3_TOKEN_SECRET,
-				api.getTokenSecret());
+		Settings.setToken(api.getToken());
+		Settings.setTokenSecret(api.getTokenSecret());
 
 		assert isAuthorized();
 	}
@@ -95,8 +86,8 @@ public class Authorization {
 
 		api.unauthorize();
 
-		PMS.getConfiguration().setCustomProperty(SOUNDCLOUD4PS3_TOKEN, null);
-		PMS.getConfiguration().setCustomProperty(SOUNDCLOUD4PS3_TOKEN_SECRET, null);
+		Settings.setToken(null);
+		Settings.setTokenSecret(null);
 
 		updateAuthorizationUrl();
 
