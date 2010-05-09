@@ -2,7 +2,6 @@ package soundcloud4ps3;
 
 import net.pms.dlna.WebAudioStream;
 import net.pms.dlna.virtual.VirtualFolder;
-import net.pms.external.SoundCloud4PS3;
 
 public class CloudFolder extends VirtualFolder {
 
@@ -33,7 +32,6 @@ public class CloudFolder extends VirtualFolder {
 	@Override
 	public void discoverChildren() {
 		super.discoverChildren();
-		SoundCloud4PS3.log("discoverChildren"); // TODO: remove
 		if (cloud != null) {
 			for (Entity entity : cloud.retrieveEntities(resource)) {
 				if (entity instanceof User) {

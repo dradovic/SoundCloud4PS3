@@ -1,5 +1,6 @@
 package soundcloud4ps3;
 
+//import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -50,7 +51,7 @@ public class Cloud {
 				DocumentBuilder db = DocumentBuilderFactory.newInstance()
 						.newDocumentBuilder();
 				Document dom = db.parse(response.getEntity().getContent());
-				Debugging.WriteXmlFile(dom, String.format("D:\\Temp\\%s.xml", resource.replace('/', '-'))); // TODO: remove
+//				Debugging.WriteXmlFile(dom, String.format("%s%s%s.xml", System.getProperty("java.io.tmpdir"), File.separatorChar, resource.replace('/', '-'))); // TODO: remove
 				return dom;
 			} catch (ParserConfigurationException e) {
 				e.printStackTrace();
@@ -72,7 +73,7 @@ public class Cloud {
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		try {
 			// extract Tracks
-			NodeList trackNodes = (NodeList) xpath.evaluate("//track",
+			NodeList trackNodes = (NodeList) xpath.evaluate("/tracks/track",
 					dom, XPathConstants.NODESET);
 			for (int i = 0; i < trackNodes.getLength(); i++) {
 				Node trackNode = trackNodes.item(i);
@@ -88,7 +89,7 @@ public class Cloud {
 			}
 			
 			// extract Users
-			NodeList userNodes = (NodeList) xpath.evaluate("//user",
+			NodeList userNodes = (NodeList) xpath.evaluate("/user | /users/user",
 					dom, XPathConstants.NODESET);
 			for (int i = 0; i < userNodes.getLength(); i++) {
 				Node userNode = userNodes.item(i);

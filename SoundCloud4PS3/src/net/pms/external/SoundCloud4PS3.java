@@ -137,22 +137,6 @@ public class SoundCloud4PS3 implements AdditionalFolderAtRoot {
 		return topFolder;
 	}
 
-//	private void updateChild() {
-//		if (cloud != null) {
-//			User user = cloud.getUser();
-//			topFolder.setName(Messages.getString(user.getUserName()	+ "'s SoundCloud"));
-//			for (Track track : cloud.getFavoriteTracks()) {
-//				topFolder.addChild(new WebAudioStream(
-//						track.getTitle(), 
-//						track.getStreamUrl(), 
-//						track.getArtworkUrl()));
-//			}
-//		} else {
-//			topFolder.setName(String.format("Please configure %s on your Media Server", PLUGIN_NAME));
-//			// FIXME: clear children. but how?
-//		}
-//	}
-
 	public static void log(String message, Object... args) {
 		PMS.minimal(PLUGIN_NAME + ": " + String.format(message, args));
 	}

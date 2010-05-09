@@ -1,7 +1,6 @@
 package soundcloud4ps3;
 
 import net.pms.dlna.virtual.VirtualFolder;
-import net.pms.external.SoundCloud4PS3;
 
 class UserFolder extends VirtualFolder {
 	
@@ -17,9 +16,7 @@ class UserFolder extends VirtualFolder {
 	@Override
 	public void discoverChildren() {
 		super.discoverChildren();
-		SoundCloud4PS3.log("discoverChildren:UserFolder"); // TODO: remove
 		addChild(new CloudFolder("Favorites", null, user.getFavoritesResource(), cloud));
 		addChild(new CloudFolder("Followings", null, user.getFollowingsResource(), cloud));
 	}
-
 }
