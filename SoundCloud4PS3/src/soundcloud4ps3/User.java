@@ -20,11 +20,19 @@ public class User extends Entity {
 		return avatarUrl;
 	}
 
+	public String getTracksResource() {
+		return String.format("users/%d/tracks", id);
+	}
+
 	public String getFavoritesResource() {
 		return String.format("users/%d/favorites", id);
 	}
 
 	public String getFollowingsResource() {
 		return String.format("users/%d/followings", id);
+	}
+
+	public String getFollowersResource() {
+		return String.format("users/%d/followers", id);
 	}
 }
