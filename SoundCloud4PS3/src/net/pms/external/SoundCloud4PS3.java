@@ -43,8 +43,6 @@ public class SoundCloud4PS3 implements AdditionalFolderAtRoot {
 	public SoundCloud4PS3() {
 		log("v%s", VERSION);
 		
-//		ResourceNode root = new ResourceNode("me");
-//		root.addChild(new ResourceNode("me/favorites"));
 		topFolder = new CloudFolder("SoundCloud", "me");
 		
 		onAuthorizationStateChanged();
@@ -159,6 +157,13 @@ public class SoundCloud4PS3 implements AdditionalFolderAtRoot {
 
 	public static void log(String message, Object... args) {
 		PMS.minimal(PLUGIN_NAME + ": " + String.format(message, args));
+	}
+
+	public static void logDebug(String message, Object... args) {
+		if (Settings.isDebug())
+		{
+			PMS.minimal(PLUGIN_NAME + " (DEBUG): " + String.format(message, args));
+		}
 	}
 
 	private void onAuthorizationStateChanged() {

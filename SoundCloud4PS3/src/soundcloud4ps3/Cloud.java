@@ -1,6 +1,7 @@
 package soundcloud4ps3;
 
 //import java.io.File;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -72,7 +73,7 @@ public class Cloud {
 	}
 	
 	private Document retrieveDocument(String resource) {
-		SoundCloud4PS3.log("Retrieving '%s'...", resource);
+		SoundCloud4PS3.logDebug("Retrieving '%s'...", resource);
 		HttpResponse response = null;
 		try {
 			response = api.get(resource);
@@ -90,7 +91,7 @@ public class Cloud {
 				DocumentBuilder db = DocumentBuilderFactory.newInstance()
 						.newDocumentBuilder();
 				Document dom = db.parse(response.getEntity().getContent());
-//				Debugging.WriteXmlFile(dom, String.format("%s%s%s.xml", System.getProperty("java.io.tmpdir"), File.separatorChar, resource.replace('/', '-'))); // TODO: remove
+				Debugging.WriteXmlFile(dom, String.format("%s%s%s.xml", System.getProperty("java.io.tmpdir"), File.separatorChar, resource.replace('/', '-')));
 				return dom;
 			} catch (ParserConfigurationException e) {
 				e.printStackTrace();
