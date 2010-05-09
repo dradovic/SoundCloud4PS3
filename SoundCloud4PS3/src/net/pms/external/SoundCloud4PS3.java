@@ -41,7 +41,7 @@ public class SoundCloud4PS3 implements AdditionalFolderAtRoot {
 	private final ResourceFolder topFolder;
 
 	public SoundCloud4PS3() {
-		log("v%s", VERSION);
+		logMinimal("v%s", VERSION);
 		
 		topFolder = new ResourceFolder("SoundCloud", "me");
 		
@@ -155,15 +155,21 @@ public class SoundCloud4PS3 implements AdditionalFolderAtRoot {
 		return topFolder;
 	}
 
-	public static void log(String message, Object... args) {
-		PMS.minimal(PLUGIN_NAME + ": " + String.format(message, args));
+	public static void logMinimal(String message, Object... args) {
+		PMS.minimal(getLogMessage(message, args));
 	}
 
+	public static void logInfo(String message, Object... args) {
+		PMS.info(getLogMessage(message, args));
+	}
+
+
 	public static void logDebug(String message, Object... args) {
-		if (Settings.isDebug())
-		{
-			PMS.minimal(PLUGIN_NAME + " (DEBUG): " + String.format(message, args));
-		}
+		PMS.debug(getLogMessage(message, args));
+	}
+
+	private static String getLogMessage(String message, Object... args) {
+		return PLUGIN_NAME + ": " + String.format(message, args);
 	}
 
 	private void onAuthorizationStateChanged() {

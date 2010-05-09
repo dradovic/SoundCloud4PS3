@@ -86,7 +86,7 @@ public class Cloud {
 				tracks.add(new Track(title, duration, artworkUrl, streamUrl));
 			}
 			else {
-				SoundCloud4PS3.log("Warning: stream-url of track '%s' is empty", title);
+				SoundCloud4PS3.logInfo("Warning: stream-url of track '%s' is empty", title);
 			}
 		}
 	}
