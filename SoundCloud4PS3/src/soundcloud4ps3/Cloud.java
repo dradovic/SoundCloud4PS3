@@ -72,7 +72,7 @@ public class Cloud {
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		try {
 			// extract Tracks
-			NodeList trackNodes = (NodeList) xpath.evaluate("/tracks/track",
+			NodeList trackNodes = (NodeList) xpath.evaluate("//track",
 					dom, XPathConstants.NODESET);
 			for (int i = 0; i < trackNodes.getLength(); i++) {
 				Node trackNode = trackNodes.item(i);
@@ -87,8 +87,8 @@ public class Cloud {
 				}
 			}
 			
-			// extract single User
-			NodeList userNodes = (NodeList) xpath.evaluate("/user",
+			// extract Users
+			NodeList userNodes = (NodeList) xpath.evaluate("//user",
 					dom, XPathConstants.NODESET);
 			for (int i = 0; i < userNodes.getLength(); i++) {
 				Node userNode = userNodes.item(i);
@@ -97,7 +97,6 @@ public class Cloud {
 				String avatarUrl = xpath.evaluate("avatar-url", userNode);
 				entities.add(new User(id, userName, avatarUrl));
 			}
-
 		} catch (XPathExpressionException e) {
 			e.printStackTrace();
 		}

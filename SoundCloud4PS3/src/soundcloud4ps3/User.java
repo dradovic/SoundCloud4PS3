@@ -23,4 +23,8 @@ public class User extends Entity {
 	public String getFavoritesResource() {
 		return String.format("users/%d/favorites", id);
 	}
+
+	public String getFollowingsResource() {
+		return String.format("users/%d/followings", id);
+	}
 }
