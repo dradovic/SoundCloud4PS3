@@ -18,7 +18,8 @@ import net.pms.dlna.DLNAResource;
 import net.pms.dlna.WebAudioStream;
 import soundcloud4ps3.Authorization;
 import soundcloud4ps3.Cloud;
-import soundcloud4ps3.Folder;
+import soundcloud4ps3.CloudFolder;
+import soundcloud4ps3.ResourceNode;
 import soundcloud4ps3.Track;
 import soundcloud4ps3.User;
 
@@ -42,10 +43,15 @@ public class SoundCloud4PS3 implements AdditionalFolderAtRoot {
 	private final JTextField verificationCodeField = new JTextField();
 	private final JLabel userLabel = new JLabel();
 
-	private final Folder topFolder = new Folder();
+	private final CloudFolder topFolder;
 
 	public SoundCloud4PS3() {
 		log("v%s", VERSION);
+		
+		ResourceNode root = new ResourceNode("me");
+		root.addChild(new ResourceNode("me/favorites"));
+		topFolder = new CloudFolder("SoundCloud", root);
+		
 		onAuthorizationStateChanged();
 	}
 
@@ -150,21 +156,21 @@ public class SoundCloud4PS3 implements AdditionalFolderAtRoot {
 		return topFolder;
 	}
 
-	private void updateChild() {
-		if (cloud != null) {
-			User user = cloud.getUser();
-			topFolder.setName(Messages.getString(user.getUserName()	+ "'s SoundCloud"));
-			for (Track track : cloud.getFavoriteTracks()) {
-				topFolder.addChild(new WebAudioStream(
-						track.getTitle(), 
-						track.getStreamUrl(), 
-						track.getArtworkUrl()));
-			}
-		} else {
-			topFolder.setName(String.format("Please configure %s on your Media Server", PLUGIN_NAME));
-			// FIXME: clear children. but how?
-		}
-	}
+//	private void updateChild() {
+//		if (cloud != null) {
+//			User user = cloud.getUser();
+//			topFolder.setName(Messages.getString(user.getUserName()	+ "'s SoundCloud"));
+//			for (Track track : cloud.getFavoriteTracks()) {
+//				topFolder.addChild(new WebAudioStream(
+//						track.getTitle(), 
+//						track.getStreamUrl(), 
+//						track.getArtworkUrl()));
+//			}
+//		} else {
+//			topFolder.setName(String.format("Please configure %s on your Media Server", PLUGIN_NAME));
+//			// FIXME: clear children. but how?
+//		}
+//	}
 
 	public static void log(String message, Object... args) {
 		PMS.minimal(PLUGIN_NAME + ": " + String.format(message, args));
@@ -184,6 +190,6 @@ public class SoundCloud4PS3 implements AdditionalFolderAtRoot {
 			authorizationUrlArea.setText(authorization.getAuthorizationUrl());
 		}
 		userLabel.setText(cloud != null ? cloud.getUser().getUserName() : "-");
-		updateChild();
+		topFolder.setCloud(cloud);
 	}
 }

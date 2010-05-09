@@ -76,9 +76,10 @@ public class Cloud {
 		}
 		return tracks;
 	}
-
-	private User retrieveUser() {
-		Document dom = retrieveDocument("me");
+	
+	public User retrieveUser(String resource)
+	{
+		Document dom = retrieveDocument(resource);
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		try {
 			String userName = xpath.evaluate("/user/username", dom);
@@ -87,9 +88,13 @@ public class Cloud {
 		} catch (XPathExpressionException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return null;		
 	}
 
+	private User retrieveUser() {
+		return retrieveUser("me");
+	}
+	
 	private Document retrieveDocument(String resource) {
 		HttpResponse response = null;
 		try {
