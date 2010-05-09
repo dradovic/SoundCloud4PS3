@@ -37,7 +37,6 @@ public class SoundCloud4PS3 implements AdditionalFolderAtRoot {
 	private final ArrayList<Component> unauthorizationComponents = new ArrayList<Component>();
 	private final JLabel authorizationStateLabel = new JLabel();
 	private final JTextArea authorizationUrlArea = new JTextArea();
-	private final JTextField verificationCodeField = new JTextField(); // TODO: make local variable
 
 	private final CloudFolder topFolder;
 
@@ -89,6 +88,7 @@ public class SoundCloud4PS3 implements AdditionalFolderAtRoot {
 		row += 2;
 
 		// Verification Code
+		final JTextField verificationCodeField = new JTextField();
 		authorizationComponents.add(builder.addLabel("Verification Code:", cc.xy(1, row)));
 		authorizationComponents.add(builder.add(verificationCodeField, cc.xy(3,	row)));
 		row += 2;
