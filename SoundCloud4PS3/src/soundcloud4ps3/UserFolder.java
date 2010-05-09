@@ -16,10 +16,10 @@ class UserFolder extends VirtualFolder {
 	@Override
 	public void discoverChildren() {
 		super.discoverChildren();
-		addChild(new CloudFolder("Tracks", null, user.getTracksResource(), cloud));
-		addChild(new CloudFolder("Sets", null, user.getSetsResource(), cloud));
-		addChild(new CloudFolder("Favorites", null, user.getFavoritesResource(), cloud));
-		addChild(new CloudFolder("Followings", null, user.getFollowingsResource(), cloud));
-		addChild(new CloudFolder("Followers", null, user.getFollowersResource(), cloud));
+		addChild(new ResourceFolder("Tracks", null, user.getTracksResource(), cloud));
+		addChild(new ResourceFolder("Sets", null, user.getSetsResource(), cloud));
+		addChild(new ResourceFolder("Favorites", null, user.getFavoritesResource(), cloud));
+		addChild(new ResourceFolder("Followings", null, user.getFollowingsResource(), cloud));
+		addChild(new ResourceFolder("Followers", null, user.getFollowersResource(), cloud));
 	}
 }

@@ -17,7 +17,7 @@ import net.pms.PMS;
 import net.pms.dlna.DLNAResource;
 import soundcloud4ps3.Authorization;
 import soundcloud4ps3.Cloud;
-import soundcloud4ps3.CloudFolder;
+import soundcloud4ps3.ResourceFolder;
 import soundcloud4ps3.Settings;
 
 import com.jgoodies.forms.builder.PanelBuilder;
@@ -38,12 +38,12 @@ public class SoundCloud4PS3 implements AdditionalFolderAtRoot {
 	private final JLabel authorizationStateLabel = new JLabel();
 	private final JTextArea authorizationUrlArea = new JTextArea();
 
-	private final CloudFolder topFolder;
+	private final ResourceFolder topFolder;
 
 	public SoundCloud4PS3() {
 		log("v%s", VERSION);
 		
-		topFolder = new CloudFolder("SoundCloud", "me");
+		topFolder = new ResourceFolder("SoundCloud", "me");
 		
 		onAuthorizationStateChanged();
 	}

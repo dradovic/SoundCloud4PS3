@@ -7,14 +7,14 @@ import net.pms.dlna.WebAudioStream;
 import net.pms.dlna.virtual.VirtualFolder;
 import net.pms.external.SoundCloud4PS3;
 
-public class CloudFolder extends VirtualFolder {
+public class ResourceFolder extends VirtualFolder {
 
 	private final String resource;
 
 	private Cloud cloud;
 	private boolean refresh;
 
-	public CloudFolder(String name, String thumbnailIcon, String resource, Cloud cloud) {
+	public ResourceFolder(String name, String thumbnailIcon, String resource, Cloud cloud) {
 		super(name, thumbnailIcon);
 		assert cloud != null;
 		
@@ -22,7 +22,7 @@ public class CloudFolder extends VirtualFolder {
 		this.resource = resource;
 	}
 	
-	public CloudFolder(String name, String resource) {
+	public ResourceFolder(String name, String resource) {
 		this(name, null, resource, null);
 	}
 	
