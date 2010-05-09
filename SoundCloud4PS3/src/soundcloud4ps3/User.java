@@ -1,6 +1,6 @@
 package soundcloud4ps3;
 
-public class User {
+public class User extends Entity {
 	private String userName;
 	private String avatarUrl;
 	

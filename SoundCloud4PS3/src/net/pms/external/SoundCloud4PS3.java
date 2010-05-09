@@ -12,16 +12,12 @@ import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import net.pms.Messages;
 import net.pms.PMS;
 import net.pms.dlna.DLNAResource;
-import net.pms.dlna.WebAudioStream;
 import soundcloud4ps3.Authorization;
 import soundcloud4ps3.Cloud;
 import soundcloud4ps3.CloudFolder;
 import soundcloud4ps3.ResourceNode;
-import soundcloud4ps3.Track;
-import soundcloud4ps3.User;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.factories.Borders;

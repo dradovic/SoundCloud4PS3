@@ -113,6 +113,7 @@ public class Cloud {
 				DocumentBuilder db = DocumentBuilderFactory.newInstance()
 						.newDocumentBuilder();
 				Document dom = db.parse(response.getEntity().getContent());
+				Debugging.WriteXmlFile(dom, String.format("D:\\Temp\\%s.xml", resource.replace('/', '-'))); // TODO: remove
 				return dom;
 			} catch (ParserConfigurationException e) {
 				e.printStackTrace();
@@ -127,19 +128,43 @@ public class Cloud {
 		return null;
 	}
 
-//	private void WriteXmlFile(Document dom) {
-//		try {
-//			// Prepare the DOM document for writing
-//			Source source = new DOMSource(dom);
-//			// Prepare the output file
-//			File file = new File("D:\\Temp\\test.xml");
-//			Result result = new StreamResult(file); // Write the DOM document to
-//			// the file
-//			Transformer xformer = TransformerFactory.newInstance()
-//					.newTransformer();
-//			xformer.transform(source, result);
-//		} catch (TransformerConfigurationException e) {
-//		} catch (TransformerException e) {
-//		}
-//	}
+	public ArrayList<Entity> retrieveEntities(String resource) {
+		ArrayList<Entity> entities = new ArrayList<Entity>();
+		
+		Document dom = retrieveDocument(resource);
+		XPath xpath = XPathFactory.newInstance().newXPath();
+		try {
+			// extract Tracks
+			NodeList trackNodes = (NodeList) xpath.evaluate("/tracks/track",
+					dom, XPathConstants.NODESET);
+			for (int i = 0; i < trackNodes.getLength(); i++) {
+				Node trackNode = trackNodes.item(i);
+				String title = xpath.evaluate("title", trackNode);
+				String artworkUrl = xpath.evaluate("artwork-url", trackNode);
+				String streamUrl = xpath.evaluate("stream-url", trackNode);
+				if (!streamUrl.isEmpty()) {
+					entities.add(new Track(title, artworkUrl, streamUrl));
+				}
+				else {
+					SoundCloud4PS3.log("Warning: stream-url of track '%s' is empty", title);
+				}
+			}
+			
+			// extract single User
+			NodeList userNodes = (NodeList) xpath.evaluate("/user",
+					dom, XPathConstants.NODESET);
+			for (int i = 0; i < userNodes.getLength(); i++) {
+				Node userNode = userNodes.item(i);
+				String userName = xpath.evaluate("username", userNode);
+				String avatarUrl = xpath.evaluate("avatar-url", userNode);
+				entities.add(new User(userName, avatarUrl));
+			}
+
+		} catch (XPathExpressionException e) {
+			e.printStackTrace();
+		}
+
+		
+		return entities;
+	}
 }

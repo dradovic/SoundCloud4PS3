@@ -38,8 +38,14 @@ public class CloudFolder extends VirtualFolder {
 		SoundCloud4PS3.log("discoverChildren");
 		if (cloud != null) {
 			for (ResourceNode node : nodes) {
-				User user = cloud.retrieveUser(node.getResource());
-				addChild(new CloudFolder(user.getUserName(), user.getAvatarUrl(), node.getChildren(), cloud));
+				for (Entity entity : cloud.retrieveEntities(node.getResource())) {
+					if (entity instanceof User) {
+						User user = (User)entity;
+						addChild(new CloudFolder(user.getUserName(), user.getAvatarUrl(), node.getChildren(), cloud));
+					}
+				}
+//				User user = cloud.retrieveUser(node.getResource());
+//				addChild(new CloudFolder(user.getUserName(), user.getAvatarUrl(), node.getChildren(), cloud));
 	//			addChild(new CloudFolder(user.getUserName() + "'s Follwings", "/user/followings", cloud));
 			}
 		}

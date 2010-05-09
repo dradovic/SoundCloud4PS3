@@ -1,6 +1,6 @@
 package soundcloud4ps3;
 
-public class Track {
+public class Track extends Entity {
 	private String title;
 	private String artworkUrl;
 	private String streamUrl;
