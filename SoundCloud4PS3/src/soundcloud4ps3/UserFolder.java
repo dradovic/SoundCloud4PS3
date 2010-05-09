@@ -17,6 +17,7 @@ class UserFolder extends VirtualFolder {
 	public void discoverChildren() {
 		super.discoverChildren();
 		addChild(new CloudFolder("Tracks", null, user.getTracksResource(), cloud));
+		addChild(new CloudFolder("Sets", null, user.getSetsResource(), cloud));
 		addChild(new CloudFolder("Favorites", null, user.getFavoritesResource(), cloud));
 		addChild(new CloudFolder("Followings", null, user.getFollowingsResource(), cloud));
 		addChild(new CloudFolder("Followers", null, user.getFollowersResource(), cloud));

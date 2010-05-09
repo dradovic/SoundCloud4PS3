@@ -23,6 +23,10 @@ public class User implements Comparable<User> {
 	public String getTracksResource() {
 		return String.format("users/%d/tracks", id);
 	}
+	
+	public String getSetsResource() {
+		return String.format("users/%d/playlists", id);
+	}
 
 	public String getFavoritesResource() {
 		return String.format("users/%d/favorites", id);

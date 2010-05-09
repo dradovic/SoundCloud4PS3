@@ -33,7 +33,7 @@ public class Cloud {
 		this.api = api;
 	}
 	
-	public void retrieveEntities(String resource, ArrayList<User> users, ArrayList<Track> tracks) {
+	public void retrieveEntities(String resource, ArrayList<User> users, ArrayList<Track> tracks, ArrayList<Set> sets) {
 		assert users != null;
 		assert tracks != null;
 		
@@ -43,19 +43,7 @@ public class Cloud {
 			// extract Tracks
 			NodeList trackNodes = (NodeList) xpath.evaluate("/tracks/track",
 					dom, XPathConstants.NODESET);
-			for (int i = 0; i < trackNodes.getLength(); i++) {
-				Node trackNode = trackNodes.item(i);
-				String title = xpath.evaluate("title", trackNode);
-				int duration = Integer.parseInt(xpath.evaluate("duration", trackNode));
-				String artworkUrl = xpath.evaluate("artwork-url", trackNode);
-				String streamUrl = xpath.evaluate("stream-url", trackNode);
-				if (!streamUrl.isEmpty()) {
-					tracks.add(new Track(title, duration, artworkUrl, streamUrl));
-				}
-				else {
-					SoundCloud4PS3.log("Warning: stream-url of track '%s' is empty", title);
-				}
-			}
+			fillTracksFromXml(tracks, xpath, trackNodes);
 			
 			// extract Users
 			NodeList userNodes = (NodeList) xpath.evaluate("/user | /users/user",
@@ -67,8 +55,39 @@ public class Cloud {
 				String avatarUrl = xpath.evaluate("avatar-url", userNode);
 				users.add(new User(id, userName, avatarUrl));
 			}
+			
+			// extract Sets
+			NodeList setNodes = (NodeList) xpath.evaluate("/playlists/playlist",
+					dom, XPathConstants.NODESET);
+			for (int i = 0; i < setNodes.getLength(); i++) {
+				Node setNode = setNodes.item(i);
+				String title = xpath.evaluate("title", setNode);
+				String artworkUrl = xpath.evaluate("artwork-url", setNode);
+				ArrayList<Track> setTracks = new ArrayList<Track>();
+				NodeList setTrackNodes = (NodeList) xpath.evaluate("tracks/track",
+						setNode, XPathConstants.NODESET);
+				fillTracksFromXml(setTracks, xpath, setTrackNodes);
+				sets.add(new Set(title, artworkUrl, setTracks));
+			}
+			
 		} catch (XPathExpressionException e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void fillTracksFromXml(ArrayList<Track> tracks, XPath xpath, NodeList trackNodes) throws XPathExpressionException {
+		for (int i = 0; i < trackNodes.getLength(); i++) {
+			Node trackNode = trackNodes.item(i);
+			String title = xpath.evaluate("title", trackNode);
+			int duration = Integer.parseInt(xpath.evaluate("duration", trackNode));
+			String artworkUrl = xpath.evaluate("artwork-url", trackNode);
+			String streamUrl = xpath.evaluate("stream-url", trackNode);
+			if (!streamUrl.isEmpty()) {
+				tracks.add(new Track(title, duration, artworkUrl, streamUrl));
+			}
+			else {
+				SoundCloud4PS3.log("Warning: stream-url of track '%s' is empty", title);
+			}
 		}
 	}
 	
