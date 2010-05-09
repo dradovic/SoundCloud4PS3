@@ -43,19 +43,32 @@ public class CloudFolder extends VirtualFolder {
 		if (cloud != null) {
 			ArrayList<User> users = new ArrayList<User>();
 			ArrayList<Track> tracks = new ArrayList<Track>();
-			cloud.retrieveEntities(resource, users, tracks);
+			ArrayList<Set> sets = new ArrayList<Set>();
+			cloud.retrieveEntities(resource, users, tracks, sets);
 			Collections.sort(users);
 			for (User user : users) {
 				addChild(new UserFolder(user, cloud));
 			}
 			for (Track track : tracks) {
-				addChild(new WebAudioStream(
-					String.format("%s (%s)", track.getTitle(), track.getFormattedDuration()), 
-					track.getStreamUrl(), 
-					track.getArtworkUrl()));
+				addChild(trackToStream(track));
+			}
+			for (Set set : sets)
+			{
+				VirtualFolder setFolder = new VirtualFolder(set.getTitle(), set.getArtworkUrl());
+				for (Track track : set.getTracks()) {
+					setFolder.addChild(trackToStream(track));
+				}
+				addChild(setFolder);	
 			}
 		}
 		this.refresh = false;
+	}
+
+	private WebAudioStream trackToStream(Track track) {
+		return new WebAudioStream(
+			String.format("%s (%s)", track.getTitle(), track.getFormattedDuration()), 
+			track.getStreamUrl(), 
+			track.getArtworkUrl());
 	}
 	
 	@Override
@@ -68,10 +81,4 @@ public class CloudFolder extends VirtualFolder {
 		}
 		return refresh;
 	}
-	
-//	@Override
-//	public boolean analyzeChildren(int count) {
-//		SoundCloud4PS3.logDebug("analyzeChildren(%d)", count);
-//		return super.analyzeChildren(count);
-//	}
 }
