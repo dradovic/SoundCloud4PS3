@@ -5,12 +5,14 @@ import java.util.Collections;
 
 import net.pms.dlna.WebAudioStream;
 import net.pms.dlna.virtual.VirtualFolder;
+import net.pms.external.SoundCloud4PS3;
 
 public class CloudFolder extends VirtualFolder {
 
 	private final String resource;
 
 	private Cloud cloud;
+	private boolean refresh;
 
 	public CloudFolder(String name, String thumbnailIcon, String resource, Cloud cloud) {
 		super(name, thumbnailIcon);
@@ -25,12 +27,19 @@ public class CloudFolder extends VirtualFolder {
 	}
 	
 	public void setCloud(Cloud cloud) {
+		this.refresh = (this.cloud != cloud);
 		this.cloud = cloud;
 	}
-
+	
 	@Override
 	public void discoverChildren() {
 		super.discoverChildren();
+
+		SoundCloud4PS3.logDebug("discoverChildren");
+		addChildren();
+	}
+
+	private void addChildren() {
 		if (cloud != null) {
 			ArrayList<User> users = new ArrayList<User>();
 			ArrayList<Track> tracks = new ArrayList<Track>();
@@ -46,5 +55,23 @@ public class CloudFolder extends VirtualFolder {
 					track.getArtworkUrl()));
 			}
 		}
+		this.refresh = false;
 	}
+	
+	@Override
+	public boolean refreshChildren() {
+		boolean refresh = this.refresh || super.refreshChildren();
+		
+		SoundCloud4PS3.logDebug("refreshChildren = %s", Boolean.toString(refresh));
+		if (this.refresh) {
+			addChildren();
+		}
+		return refresh;
+	}
+	
+//	@Override
+//	public boolean analyzeChildren(int count) {
+//		SoundCloud4PS3.logDebug("analyzeChildren(%d)", count);
+//		return super.analyzeChildren(count);
+//	}
 }
