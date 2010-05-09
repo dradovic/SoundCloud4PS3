@@ -1,27 +1,25 @@
 package soundcloud4ps3;
 
-import java.util.ArrayList;
-
+import net.pms.dlna.WebAudioStream;
 import net.pms.dlna.virtual.VirtualFolder;
 import net.pms.external.SoundCloud4PS3;
 
 public class CloudFolder extends VirtualFolder {
 
-	private final ArrayList<ResourceNode> nodes;
+	private final String resource;
 
 	private Cloud cloud;
 
-	public CloudFolder(String name, String thumbnailIcon, ArrayList<ResourceNode> nodes, Cloud cloud) {
+	public CloudFolder(String name, String thumbnailIcon, String resource, Cloud cloud) {
 		super(name, thumbnailIcon);
 		assert cloud != null;
 		
 		this.cloud = cloud;
-		this.nodes = nodes;
+		this.resource = resource;
 	}
 	
-	public CloudFolder(String name, ResourceNode node) {
-		this(name, null, new ArrayList<ResourceNode>(), null);
-		nodes.add(node);
+	public CloudFolder(String name, String resource) {
+		this(name, null, resource, null);
 	}
 	
 	public void setCloud(Cloud cloud) {
@@ -35,18 +33,18 @@ public class CloudFolder extends VirtualFolder {
 	@Override
 	public void discoverChildren() {
 		super.discoverChildren();
-		SoundCloud4PS3.log("discoverChildren");
+		SoundCloud4PS3.log("discoverChildren"); // TODO: remove
 		if (cloud != null) {
-			for (ResourceNode node : nodes) {
-				for (Entity entity : cloud.retrieveEntities(node.getResource())) {
-					if (entity instanceof User) {
-						User user = (User)entity;
-						addChild(new CloudFolder(user.getUserName(), user.getAvatarUrl(), node.getChildren(), cloud));
-					}
+			for (Entity entity : cloud.retrieveEntities(resource)) {
+				if (entity instanceof User) {
+					User user = (User)entity;
+					addChild(new UserFolder(user, cloud));
 				}
-//				User user = cloud.retrieveUser(node.getResource());
-//				addChild(new CloudFolder(user.getUserName(), user.getAvatarUrl(), node.getChildren(), cloud));
-	//			addChild(new CloudFolder(user.getUserName() + "'s Follwings", "/user/followings", cloud));
+				else if (entity instanceof Track)
+				{
+					Track track = (Track)entity;
+					addChild(new WebAudioStream(track.getTitle(), track.getStreamUrl(), track.getArtworkUrl()));
+				}
 			}
 		}
 	}

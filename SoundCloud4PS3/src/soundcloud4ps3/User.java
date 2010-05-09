@@ -1,11 +1,13 @@
 package soundcloud4ps3;
 
 public class User extends Entity {
-	private String userName;
-	private String avatarUrl;
+	private final int id;
+	private final String userName;
+	private final String avatarUrl;
 	
-	public User(String userName, String avatarUrl) {
+	public User(int id, String userName, String avatarUrl) {
 		super();
+		this.id = id;
 		this.userName = userName;
 		this.avatarUrl = avatarUrl.isEmpty() ? null : avatarUrl;
 	}
@@ -16,5 +18,9 @@ public class User extends Entity {
 
 	public String getAvatarUrl() {
 		return avatarUrl;
+	}
+
+	public String getFavoritesResource() {
+		return String.format("users/%d/favorites", id);
 	}
 }

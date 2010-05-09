@@ -26,76 +26,13 @@ import org.xml.sax.SAXException;
 public class Cloud {
 	private SoundCloudAPI api;
 	
-	private User user;
-	private ArrayList<Track> favoriteTracks;
-
 	public Cloud(SoundCloudAPI api)
 	{
 		this.api = api;
 	}
 	
-	public User getUser()
-	{
-		if (user == null)
-		{
-			user = retrieveUser();
-		}
-		return user;
-	}
-	
-	public ArrayList<Track> getFavoriteTracks()
-	{
-		if (favoriteTracks == null)
-		{
-			favoriteTracks = retrieveFavoriteTracks();
-		}
-		return favoriteTracks;
-	}
-	
-	private ArrayList<Track> retrieveFavoriteTracks() {
-		ArrayList<Track> tracks = new ArrayList<Track>();
-		Document dom = retrieveDocument("me/favorites");
-		XPath xpath = XPathFactory.newInstance().newXPath();
-		try {
-			NodeList trackNodes = (NodeList) xpath.evaluate("/tracks/track",
-					dom, XPathConstants.NODESET);
-			for (int i = 0; i < trackNodes.getLength(); i++) {
-				Node trackNode = trackNodes.item(i);
-				String title = xpath.evaluate("title", trackNode);
-				String artworkUrl = xpath.evaluate("artwork-url", trackNode);
-				String streamUrl = xpath.evaluate("stream-url", trackNode);
-				if (!streamUrl.isEmpty()) {
-					tracks.add(new Track(title, artworkUrl, streamUrl));
-				}
-				else {
-					SoundCloud4PS3.log("Warning: stream-url of track '%s' is empty", title);
-				}
-			}
-		} catch (XPathExpressionException e) {
-			e.printStackTrace();
-		}
-		return tracks;
-	}
-	
-	public User retrieveUser(String resource)
-	{
-		Document dom = retrieveDocument(resource);
-		XPath xpath = XPathFactory.newInstance().newXPath();
-		try {
-			String userName = xpath.evaluate("/user/username", dom);
-			String avatarUrl = xpath.evaluate("/user/avatar-url", dom);
-			return new User(userName, avatarUrl);
-		} catch (XPathExpressionException e) {
-			e.printStackTrace();
-		}
-		return null;		
-	}
-
-	private User retrieveUser() {
-		return retrieveUser("me");
-	}
-	
 	private Document retrieveDocument(String resource) {
+		SoundCloud4PS3.log("Retrieving '%s'...", resource);
 		HttpResponse response = null;
 		try {
 			response = api.get(resource);
@@ -155,15 +92,15 @@ public class Cloud {
 					dom, XPathConstants.NODESET);
 			for (int i = 0; i < userNodes.getLength(); i++) {
 				Node userNode = userNodes.item(i);
+				int id = Integer.parseInt(xpath.evaluate("id", userNode));
 				String userName = xpath.evaluate("username", userNode);
 				String avatarUrl = xpath.evaluate("avatar-url", userNode);
-				entities.add(new User(userName, avatarUrl));
+				entities.add(new User(id, userName, avatarUrl));
 			}
 
 		} catch (XPathExpressionException e) {
 			e.printStackTrace();
 		}
-
 		
 		return entities;
 	}
