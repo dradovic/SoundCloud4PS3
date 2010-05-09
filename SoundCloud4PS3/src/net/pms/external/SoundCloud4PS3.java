@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
@@ -17,6 +18,7 @@ import net.pms.dlna.DLNAResource;
 import soundcloud4ps3.Authorization;
 import soundcloud4ps3.Cloud;
 import soundcloud4ps3.CloudFolder;
+import soundcloud4ps3.Settings;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.factories.Borders;
@@ -35,7 +37,7 @@ public class SoundCloud4PS3 implements AdditionalFolderAtRoot {
 	private final ArrayList<Component> unauthorizationComponents = new ArrayList<Component>();
 	private final JLabel authorizationStateLabel = new JLabel();
 	private final JTextArea authorizationUrlArea = new JTextArea();
-	private final JTextField verificationCodeField = new JTextField();
+	private final JTextField verificationCodeField = new JTextField(); // TODO: make local variable
 
 	private final CloudFolder topFolder;
 
@@ -54,7 +56,7 @@ public class SoundCloud4PS3 implements AdditionalFolderAtRoot {
 
 		FormLayout layout = new FormLayout(
 				"70dlu, 10dlu, 300dlu", //$NON-NLS-1$
-				"p, 5dlu, p, 5dlu, p, 10dlu, 10dlu, p, 5dlu, p, 5dlu, p, 5dlu, p, 0:grow"); //$NON-NLS-1$
+				"p, 5dlu, p, 5dlu, p, 10dlu, 10dlu, p, 5dlu, p, 5dlu, p, 5dlu, p, 5dlu, p, 5dlu, p, 0:grow"); //$NON-NLS-1$
 		PanelBuilder builder = new PanelBuilder(layout);
 		builder.setBorder(Borders.EMPTY_BORDER);
 		builder.setOpaque(false);
@@ -116,6 +118,24 @@ public class SoundCloud4PS3 implements AdditionalFolderAtRoot {
 		});
 		unauthorizationComponents.add(builder.add(unauthorizeButton, cc.xy(1, row)));
 		row += 2;
+		
+		//
+		// Debugging
+		//
+		cmp = builder.addSeparator("Debugging", cc.xyw(1, row, 3));
+		cmp = (JComponent) cmp.getComponent(0);
+		cmp.setFont(cmp.getFont().deriveFont(Font.BOLD));
+		row += 2;
+
+		final JCheckBox debugCheckBox = new JCheckBox("Enabled");
+		debugCheckBox.setSelected(Settings.isDebug());
+		debugCheckBox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Settings.setDebug(debugCheckBox.isSelected());				
+			}
+		});
+		builder.add(debugCheckBox, cc.xyw(1, row, 3));
 
 		// enable/disable controls
 		onAuthorizationStateChanged();
