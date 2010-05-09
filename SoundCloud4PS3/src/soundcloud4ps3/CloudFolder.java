@@ -40,7 +40,10 @@ public class CloudFolder extends VirtualFolder {
 				addChild(new UserFolder(user, cloud));
 			}
 			for (Track track : tracks) {
-				addChild(new WebAudioStream(track.getTitle(), track.getStreamUrl(), track.getArtworkUrl()));
+				addChild(new WebAudioStream(
+					String.format("%s (%s)", track.getTitle(), track.getFormattedDuration()), 
+					track.getStreamUrl(), 
+					track.getArtworkUrl()));
 			}
 		}
 	}

@@ -45,10 +45,11 @@ public class Cloud {
 			for (int i = 0; i < trackNodes.getLength(); i++) {
 				Node trackNode = trackNodes.item(i);
 				String title = xpath.evaluate("title", trackNode);
+				int duration = Integer.parseInt(xpath.evaluate("duration", trackNode));
 				String artworkUrl = xpath.evaluate("artwork-url", trackNode);
 				String streamUrl = xpath.evaluate("stream-url", trackNode);
 				if (!streamUrl.isEmpty()) {
-					tracks.add(new Track(title, artworkUrl, streamUrl));
+					tracks.add(new Track(title, duration, artworkUrl, streamUrl));
 				}
 				else {
 					SoundCloud4PS3.log("Warning: stream-url of track '%s' is empty", title);
