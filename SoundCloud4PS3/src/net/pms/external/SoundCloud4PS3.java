@@ -4,8 +4,10 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -59,7 +61,7 @@ public class SoundCloud4PS3 implements AdditionalFolderAtRoot {
 		builder.setOpaque(false);
 
 		CellConstraints cc = new CellConstraints();
-
+		
 		//
 		// Authorization
 		//
@@ -101,7 +103,11 @@ public class SoundCloud4PS3 implements AdditionalFolderAtRoot {
 				onAuthorizationStateChanged();
 			}
 		});
-		authorizationComponents.add(builder.add(authorizeButton, cc.xy(1, row)));
+		authorizationComponents.add(builder.add(authorizeButton, cc.xy(3, row)));//, 1, CellConstraints.LEFT, CellConstraints.CENTER)));
+		URL iconUrl = authorization.getClass().getResource("images/icon.png");
+		ImageIcon icon = new ImageIcon(iconUrl, "Icon");
+		JLabel iconLabel = new JLabel(icon);
+		unauthorizationComponents.add(builder.add(iconLabel, cc.xywh(1, row, 1, 3, CellConstraints.LEFT, CellConstraints.CENTER)));
 		row += 2;
 
 		// Unauthorize Button
@@ -114,8 +120,8 @@ public class SoundCloud4PS3 implements AdditionalFolderAtRoot {
 				onAuthorizationStateChanged();
 			}
 		});
-		unauthorizationComponents.add(builder.add(unauthorizeButton, cc.xy(1, row)));
-		row += 2;
+		unauthorizationComponents.add(builder.add(unauthorizeButton, cc.xy(3, row))); //, CellConstraints.LEFT, CellConstraints.CENTER)));
+		row += 2;		
 		
 		//
 		// Debugging
