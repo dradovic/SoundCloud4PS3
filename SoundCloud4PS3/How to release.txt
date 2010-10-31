@@ -2,7 +2,7 @@
    - errors
    - warnings
    - TODOs
-2. Make sure remote master is up-to-date
+2. Make sure remote master is up-to-date (push all changes)
 3. Export jar, using the "export all output folder for selected projects" option 
 4. Tag the snapshot: 
    git tag -a v0.3 -m "release v0.3"
