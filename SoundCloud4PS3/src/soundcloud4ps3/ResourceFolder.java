@@ -67,7 +67,7 @@ public class ResourceFolder extends VirtualFolder {
 	private WebAudioStream trackToStream(Track track) {
 		return new WebAudioStream(
 			String.format("%s (%s)", track.getTitle(), track.getFormattedDuration()), 
-			track.getStreamUrl(), 
+			track.getStreamUrl() + "?consumer_key=" + Authorization.ConsumerKey, 
 			track.getArtworkUrl());
 	}
 	

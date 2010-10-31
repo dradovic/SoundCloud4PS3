@@ -11,16 +11,18 @@ import org.urbanstew.soundcloudapi.SoundCloudAPI.State;
 public class Authorization {
 	private SoundCloudAPI api;
 	private String authorizationUrl;
+	
+	public final static String ConsumerKey = "xECuntC8S1VOTtfxlGDdWA"; 
 
 	public Authorization() {
 		String token = Settings.getToken();
 		String tokenSecret = Settings.getTokenSecret();
 		if (token != null && tokenSecret != null) {
-			api = new SoundCloudAPI("xECuntC8S1VOTtfxlGDdWA",
+			api = new SoundCloudAPI(ConsumerKey,
 					"xey7LrTE6YJW9JZX8LR5AHZuQMDJ5SV010fYBYWH8s", token,
 					tokenSecret);
 		} else {
-			api = new SoundCloudAPI("xECuntC8S1VOTtfxlGDdWA",
+			api = new SoundCloudAPI(ConsumerKey,
 					"xey7LrTE6YJW9JZX8LR5AHZuQMDJ5SV010fYBYWH8s");
 			updateAuthorizationUrl();
 		}
