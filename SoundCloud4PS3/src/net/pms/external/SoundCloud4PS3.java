@@ -30,7 +30,7 @@ import com.jgoodies.forms.layout.FormLayout;
 public class SoundCloud4PS3 implements AdditionalFolderAtRoot {
 
 	private static final String PLUGIN_NAME = "SoundCloud4PS3";
-	private static final String VERSION = "0.4";
+	private static final String VERSION = "0.5";
 
 	private final Authorization authorization = new Authorization();
 	private Cloud cloud;
